@@ -1,7 +1,10 @@
-[gd_scene load_steps=5 format=3 uid="uid://c76qrvto8amjm"]
+[gd_scene load_steps=6 format=3 uid="uid://c76qrvto8amjm"]
 
 [ext_resource type="Script" path="res://scenes/player.gd" id="1_e67xg"]
 [ext_resource type="Texture2D" uid="uid://cr6am8gf643pv" path="res://icon.svg" id="1_g4ak1"]
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_ci5yb"]
+friction = 0.41
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ptyby"]
 size = Vector2(121, 121)
@@ -10,6 +13,8 @@ size = Vector2(121, 121)
 size = Vector2(120, 20)
 
 [node name="Player" type="RigidBody2D"]
+mass = 0.8
+physics_material_override = SubResource("PhysicsMaterial_ci5yb")
 lock_rotation = true
 script = ExtResource("1_e67xg")
 

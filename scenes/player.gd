@@ -11,6 +11,10 @@ func _process(delta: float) -> void:
 	var bodies: Array[Node2D] = $onGround.get_overlapping_bodies()
 	if Input.is_action_just_pressed("move_up") and bodies.size() > 1:
 		apply_central_impulse(Vector2(0, -200))
+	if Input.is_action_pressed("move_left"):
+		apply_central_impulse(Vector2(-20, 0))
+	if Input.is_action_pressed("move_right"):
+		apply_central_impulse(Vector2(20, 0))
 	
 func _physics_process(delta: float) -> void:
 	pass
