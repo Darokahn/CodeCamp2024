@@ -2,12 +2,10 @@
 
 [ext_resource type="Script" path="res://scripts/player.gd" id="1_e67xg"]
 [ext_resource type="Texture2D" uid="uid://cr6am8gf643pv" path="res://icon.svg" id="1_g4ak1"]
+[ext_resource type="Texture2D" uid="uid://b83s7etdb848t" path="res://images/pngwing.com.png" id="3_7llqh"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_tb4vh"]
 radius = 64.0078
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_f2poo"]
-size = Vector2(120, 20)
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_1oxex"]
 radius = 51.1566
@@ -21,13 +19,8 @@ shape = SubResource("CircleShape2D_tb4vh")
 [node name="Sprite2D" type="Sprite2D" parent="."]
 texture = ExtResource("1_g4ak1")
 
-[node name="onGround" type="Area2D" parent="."]
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="onGround"]
-position = Vector2(0, 61)
-shape = SubResource("RectangleShape2D_f2poo")
-
 [node name="weaponBox" type="Area2D" parent="."]
+scale = Vector2(2.04, 2.04)
 collision_layer = 2
 collision_mask = 2
 
@@ -35,4 +28,10 @@ collision_mask = 2
 shape = SubResource("CircleShape2D_1oxex")
 
 [node name="Sprite2D" type="Sprite2D" parent="weaponBox"]
-texture = ExtResource("1_g4ak1")
+position = Vector2(-3.00009, 5.99995)
+scale = Vector2(0.037234, 0.037234)
+texture = ExtResource("3_7llqh")
+
+[node name="Camera2D" type="Camera2D" parent="."]
+zoom = Vector2(0.5, 0.5)
+position_smoothing_enabled = true

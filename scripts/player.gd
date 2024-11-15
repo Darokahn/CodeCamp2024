@@ -17,9 +17,9 @@ var time_since_big_attack = 0
 func _ready() -> void:
 	pass # Replace with function body.
 	
-func big_attack(launch_direction):
-	print(launch_direction)
-	velocity += launch_direction * 100
+func big_attack(launch_direction, highest_hit):
+	print(highest_hit)
+	velocity += launch_direction * (1000 * highest_hit)
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
@@ -27,24 +27,24 @@ func _process(delta: float) -> void:
 	
 	$weaponBox.position = attack_direction * 100
 	
-	var objects = $weaponBox.get_overlapping_bodies()
-	
-	var hit_object: bool = objects.size()
+	var hit_objects = $weaponBox.get_overlapping_bodies()
 	
 	var launch_direction = attack_direction * -1
 	
 	if attack_direction.length() > 0:
-		if time_since_attack_idle < 5:
+		if time_since_attack_idle < 7:
 			if not is_on_floor():
-				if objects.size():
-					big_attack(launch_direction)
+				var highest_hit = 0
+				for object in hit_objects:
+					if "enemy" in object:
+						highest_hit = 2
+					else:
+						highest_hit = max(highest_hit, 1)
+				big_attack(launch_direction, highest_hit)
 		time_since_attack_idle += 1
 	else:
 		time_since_attack_idle = 0
 		
-	
-	
-	
 func _physics_process(delta: float) -> void:
 	if Input.is_action_just_pressed("move_up") and is_on_floor():
 		last_valid_jump = 0
