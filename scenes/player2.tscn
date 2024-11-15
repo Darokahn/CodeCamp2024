@@ -1,0 +1,33 @@
+[gd_scene load_steps=6 format=3 uid="uid://bguo0tya1k3h5"]
+
+[ext_resource type="Script" path="res://scripts/player.gd" id="1_aj17y"]
+[ext_resource type="Texture2D" uid="uid://cr6am8gf643pv" path="res://icon.svg" id="2_fk4e7"]
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_ci5yb"]
+friction = 0.0
+rough = true
+absorbent = true
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_tb4vh"]
+radius = 64.0078
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_f2poo"]
+size = Vector2(120, 20)
+
+[node name="Player" type="RigidBody2D"]
+physics_material_override = SubResource("PhysicsMaterial_ci5yb")
+lock_rotation = true
+linear_damp = 2.0
+script = ExtResource("1_aj17y")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_tb4vh")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("2_fk4e7")
+
+[node name="onGround" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="onGround"]
+position = Vector2(0, 61)
+shape = SubResource("RectangleShape2D_f2poo")

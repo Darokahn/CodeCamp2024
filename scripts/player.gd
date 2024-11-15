@@ -1,8 +1,14 @@
-extends RigidBody2D
+extends CharacterBody2D
 
-var reduced_gravity = 1
+@export var default_gravity = 200
+@export var reduced_gravity = 90
+@export var speed = 100
+@export var friction = 0.9
 
-var default_gravity = 5
+var gravity = default_gravity
+
+var last_valid_jump: int = 10
+var jump_frames = 6
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -11,27 +17,26 @@ func _ready() -> void:
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
-	var bodies: Array[Node2D] = $onGround.get_overlapping_bodies()
-	var on_ground = bodies.size() > 1
-	if Input.is_action_just_pressed("move_up"):
-		if on_ground:
-			apply_central_impulse(Vector2(0, -1500))
-	if Input.is_action_pressed("move_up"):
-		gravity_scale = reduced_gravity
-		
-	else:
-		gravity_scale = default_gravity
-	if Input.is_action_pressed("move_left"):
-		if on_ground:
-			apply_central_impulse(Vector2(-70, 0))
-		apply_central_impulse(Vector2(-20, 0))
-	if Input.is_action_pressed("move_right"):
-		if on_ground:
-			apply_central_impulse(Vector2(70, 0))
-		apply_central_impulse(Vector2(20, 0))
+	pass
 	
 func _physics_process(delta: float) -> void:
-	pass
+	if Input.is_action_just_pressed("move_up") and is_on_floor():
+		print("huh")
+		last_valid_jump = 0
+	elif last_valid_jump <= jump_frames:
+		last_valid_jump += 1
+	var x_movement = Input.get_axis("move_left", "move_right")
+		
+	if Input.is_action_pressed("move_up"):
+		gravity = reduced_gravity
+	else:
+		gravity = default_gravity
+	velocity.x += x_movement * speed
+	velocity.y += gravity
+	velocity *= friction
+	if last_valid_jump < jump_frames:
+		velocity.y -= 500
+	move_and_slide()
 
 func _integrate_forces(state: PhysicsDirectBodyState2D) -> void:
 	pass
