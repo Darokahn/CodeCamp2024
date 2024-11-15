@@ -15,3 +15,4 @@ shape = SubResource("CircleShape2D_p1ted")
 texture = ExtResource("1_g4ak1")
 
 [node name="RayCast2D" type="RayCast2D" parent="."]
+position = Vector2(0, -10)
