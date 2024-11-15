@@ -1,7 +1,7 @@
 extends CharacterBody2D
 
 @export var default_gravity = 200
-@export var reduced_gravity = 90
+@export var reduced_gravity = 170
 @export var speed = 100
 @export var friction = 0.9
 
@@ -35,7 +35,7 @@ func _physics_process(delta: float) -> void:
 	velocity.y += gravity
 	velocity *= friction
 	if last_valid_jump < jump_frames:
-		velocity.y -= 500
+		velocity.y -= 700
 	move_and_slide()
 
 func _integrate_forces(state: PhysicsDirectBodyState2D) -> void:
