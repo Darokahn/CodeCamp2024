@@ -10,6 +10,8 @@ var gravity = default_gravity
 var last_valid_jump: int = 10
 var jump_frames = 6
 
+var time_since_attack = 10
+
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	pass # Replace with function body.
@@ -17,11 +19,18 @@ func _ready() -> void:
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
-	pass
+	var attack_direction = Vector2(Input.get_axis("arrow_left", "arrow_right"), Input.get_axis("arrow_up", "arrow_down"))
+	
+	$weaponBox.position = attack_direction * 100
+	
+	var hitObject: bool = $weaponBox.get_overlapping_bodies().size() > 1
+	
+	var launch_direction = attack_direction * -1
+	
+	
 	
 func _physics_process(delta: float) -> void:
 	if Input.is_action_just_pressed("move_up") and is_on_floor():
-		print("huh")
 		last_valid_jump = 0
 	elif last_valid_jump <= jump_frames:
 		last_valid_jump += 1
