@@ -1,0 +1,43 @@
+[gd_scene load_steps=4 format=4 uid="uid://724w742udom4"]
+
+[ext_resource type="Texture2D" uid="uid://domaevnbemjyd" path="res://images/tilemapStolen.jpeg" id="1_bkom1"]
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_jd7u7"]
+texture = ExtResource("1_bkom1")
+texture_region_size = Vector2i(15, 15)
+0:0/0 = 0
+0:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
+1:0/0 = 0
+2:0/0 = 0
+3:0/0 = 0
+4:0/0 = 0
+4:1/0 = 0
+5:1/0 = 0
+5:0/0 = 0
+6:0/0 = 0
+7:0/0 = 0
+7:1/0 = 0
+6:1/0 = 0
+6:2/0 = 0
+7:2/0 = 0
+5:2/0 = 0
+4:2/0 = 0
+3:1/0 = 0
+3:2/0 = 0
+2:2/0 = 0
+1:1/0 = 0
+2:1/0 = 0
+1:2/0 = 0
+0:2/0 = 0
+0:1/0 = 0
+
+[sub_resource type="TileSet" id="TileSet_a0d3k"]
+physics_layer_0/collision_layer = 1
+sources/0 = SubResource("TileSetAtlasSource_jd7u7")
+
+[node name="Level" type="Node2D"]
+
+[node name="TileMapLayer" type="TileMapLayer" parent="."]
+position = Vector2(313, 59)
+tile_map_data = PackedByteArray("AAD6/wEAAAAAAAAAAAD7/wEAAAAAAAAAAAD8/wEAAAAAAAAAAAD9/wEAAAAAAAAAAAD+/wIAAAAAAAAAAAD//wIAAAAAAAAAAAAAAAIAAAAAAAAAAAABAAIAAAAAAAAAAAACAAMAAAAAAAAAAAADAAMAAAAAAAAAAAAEAAMAAAAAAAAAAAAFAAMAAAAAAAAAAAAGAAMAAAAAAAAAAAAHAAMAAAAAAAAAAAAIAAIAAAAAAAAAAAAJAAIAAAAAAAAAAAAKAAIAAAAAAAAAAAALAAIAAAAAAAAAAAAMAAIAAAAAAAAAAAANAAIAAAAAAAAAAAAOAAIAAAAAAAAAAAAPAAIAAAAAAAAAAAAPAAEAAAAAAAAAAAAQAAEAAAAAAAAAAAARAAEAAAAAAAAAAAASAAEAAAAAAAAAAAASAAAAAAAAAAAAAAA=")
+tile_set = SubResource("TileSet_a0d3k")
