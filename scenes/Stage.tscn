@@ -20,7 +20,7 @@ func _process(delta: float) -> void:
 script = SubResource("GDScript_dshhx")
 
 [node name="Level" parent="." instance=ExtResource("2_2qvx7")]
-position = Vector2(109, 331)
+position = Vector2(-359, 23)
 
 [node name="Player" parent="." instance=ExtResource("2_u2vts")]
 position = Vector2(489, 318)
