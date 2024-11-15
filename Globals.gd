@@ -1,0 +1,5 @@
+extends Node
+
+var AIR_FRICTION = 0.99
+var GROUND_FRICTION = 0.95
+var GRAVITY = 1000
