@@ -1,4 +1,4 @@
-[gd_scene load_steps=6 format=3 uid="uid://c76qrvto8amjm"]
+[gd_scene load_steps=7 format=3 uid="uid://c76qrvto8amjm"]
 
 [ext_resource type="Script" path="res://scripts/player.gd" id="1_e67xg"]
 [ext_resource type="Texture2D" uid="uid://cr6am8gf643pv" path="res://icon.svg" id="1_g4ak1"]
@@ -9,6 +9,9 @@ radius = 64.0078
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_1oxex"]
 radius = 51.1566
+
+[sub_resource type="OccluderPolygon2D" id="OccluderPolygon2D_cd60y"]
+polygon = PackedVector2Array(50, -62, 61, -52, 61, 50, 51, 60, -50, 60, -60, 51, -60, -51, -51, -62)
 
 [node name="Player" type="CharacterBody2D"]
 script = ExtResource("1_e67xg")
@@ -35,3 +38,6 @@ texture = ExtResource("3_7llqh")
 [node name="Camera2D" type="Camera2D" parent="."]
 zoom = Vector2(0.5, 0.5)
 position_smoothing_enabled = true
+
+[node name="LightOccluder2D" type="LightOccluder2D" parent="."]
+occluder = SubResource("OccluderPolygon2D_cd60y")
