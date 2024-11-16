@@ -5,6 +5,8 @@ extends CharacterBody2D
 @export var speed = 100
 @export var friction = 0.9
 
+var player
+
 var selections
 enum selection {none, hammer, pogo}
 var selected = selection.hammer
@@ -68,7 +70,7 @@ func process_hammer():
 	if Input.is_action_pressed("activate_hammer"):
 		hammer_data["spin_progress"] = (hammer_data["spin_progress"] + 1) % (hammer_data["total_steps"] * delay_scale)
 		if facing == direction.left:
-			hammer_data["spin_progra"] = hammer_data["total_steps"] - hammer_data
+			hammer_data["spin_progress"] = hammer_data["total_steps"] - hammer_data["spin_progress"]
 		$hammer.position = hammer_data["spin_frames"][hammer_data["spin_progress"] / delay_scale]
 		print($hammer.position)
 		
