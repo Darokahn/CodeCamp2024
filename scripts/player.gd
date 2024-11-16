@@ -7,12 +7,14 @@ extends CharacterBody2D
 
 var selections
 enum selection {none, hammer, pogo}
-var selected = selection.pogo
+var selected = selection.hammer
 
 var gravity = default_gravity
 
 var last_valid_jump: int = 10
 var jump_frames = 6
+enum direction {left, right}
+var facing: direction = direction.left
 
 var pogo_data = {
 	"time_since_attack_idle": 0,
@@ -20,17 +22,24 @@ var pogo_data = {
 }
 
 var hammer_data = {
-	"spin_cycle": 0,
-	
+	"total_steps": 8,
+	"spin_progress": 8,
+	"spin_frames": [],
+	"default_position": Vector2()
 }
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	selections = [$none, $hammer, $pogo]
-	
+	var swing_distance = 100
+	for i in range(8):
+		var angle = (float(i)/hammer_data["total_steps"]) * (2 * PI)
+		hammer_data["spin_frames"].append(Vector2(cos(angle) * swing_distance, sin(angle) * swing_distance))
+	hammer_data["default_position"] = Vector2(0, 50)
+
 func big_pogo(launch_direction, highest_hit):
 	velocity += launch_direction * (3000 * highest_hit)
-	
+
 func process_pogo():
 	var attack_direction = Vector2(Input.get_axis("arrow_left", "arrow_right"), Input.get_axis("arrow_up", "arrow_down"))
 	
@@ -54,8 +63,18 @@ func process_pogo():
 		pogo_data["time_since_attack_idle"] = 0
 		
 func process_hammer():
+	var delay_scale = 10
+
 	if Input.is_action_pressed("activate_hammer"):
-		print("hammer")
+		hammer_data["spin_progress"] = (hammer_data["spin_progress"] + 1) % (hammer_data["total_steps"] * delay_scale)
+		if facing == direction.left:
+			hammer_data["spin_progra"] = hammer_data["total_steps"] - hammer_data
+		$hammer.position = hammer_data["spin_frames"][hammer_data["spin_progress"] / delay_scale]
+		print($hammer.position)
+		
+	else:
+		hammer_data["spin_progress"] = 0
+		$hammer.position = hammer_data["default_position"]
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
@@ -68,7 +87,6 @@ func _process(delta: float) -> void:
 		process_hammer()
 	elif selected == selection.pogo:
 		process_pogo()
-
 
 func _physics_process(delta: float) -> void:
 	if Input.is_action_just_pressed("move_up") and is_on_floor():
