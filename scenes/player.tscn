@@ -67,7 +67,7 @@ shape = SubResource("CapsuleShape2D_jpt1o")
 
 [node name="Sprite2D" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_fuukm")
-frame_progress = 0.302045
+frame_progress = 0.766733
 
 [node name="pogo" type="Area2D" parent="."]
 visible = false

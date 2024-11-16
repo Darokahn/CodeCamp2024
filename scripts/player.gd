@@ -142,22 +142,13 @@ func _physics_process(delta: float) -> void:
 	else:
 		last_valid_jump += 1
 	var x_movement = Input.get_axis("move_left", "move_right")
-	
-	if Input.is_action_pressed("move_up") and is_on_floor():
-		inertia = 100
-	elif Input.is_action_pressed("move_up") and inertia > 50:
-		inertia -= 10
+	if Input.is_action_pressed("arrow_up"):
+		gravity = reduced_gravity
 	else:
-		if inertia > 0:
-			inertia -= 35
-		if inertia < 0:
-			inertia -= 10
-	
+		gravity = default_gravity
 	velocity.x += x_movement * speed
-	#flies up cuz inertia
-	velocity.y -= inertia
 	#adds gravity
-	velocity.y += gravity + inertia *0.2
+	velocity.y += gravity
 	velocity *= friction
 	if last_valid_jump < jump_frames:
 		velocity.y -= jump_force_per_frame
