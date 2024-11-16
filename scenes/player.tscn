@@ -1,13 +1,24 @@
-[gd_scene load_steps=8 format=3 uid="uid://c76qrvto8amjm"]
+[gd_scene load_steps=9 format=3 uid="uid://c76qrvto8amjm"]
 
 [ext_resource type="Script" path="res://scripts/player.gd" id="1_e67xg"]
-[ext_resource type="Texture2D" uid="uid://xkrtj2kgy8v6" path="res://images/standing_sprite.png" id="2_8xrsf"]
-[ext_resource type="Texture2D" uid="uid://dpemsaedevew4" path="res://images/pogo.png" id="3_0twfa"]
-[ext_resource type="Texture2D" uid="uid://d0x320syqgcww" path="res://images/hammer.jpeg" id="4_jpb4i"]
+[ext_resource type="Texture2D" uid="uid://xkrtj2kgy8v6" path="res://images/player/standing_sprite.png" id="2_8xrsf"]
+[ext_resource type="Texture2D" uid="uid://dpemsaedevew4" path="res://images/temp/pogo.png" id="3_0twfa"]
+[ext_resource type="Texture2D" uid="uid://d0x320syqgcww" path="res://images/temp/hammer.jpeg" id="4_jpb4i"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_jpt1o"]
 radius = 20.0
 height = 72.0
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_fuukm"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2_8xrsf")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_1oxex"]
 radius = 24.0
@@ -26,8 +37,8 @@ position = Vector2(2, 6)
 scale = Vector2(0.5, 0.5)
 shape = SubResource("CapsuleShape2D_jpt1o")
 
-[node name="Sprite2D" type="Sprite2D" parent="."]
-texture = ExtResource("2_8xrsf")
+[node name="Sprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_fuukm")
 
 [node name="pogo" type="Area2D" parent="."]
 scale = Vector2(0.5, 0.5)

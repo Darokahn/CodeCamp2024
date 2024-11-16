@@ -9,7 +9,7 @@ var player
 
 var selections
 enum selection {none, hammer, pogo}
-var selected = selection.pogo
+var selected = selection.hammer
 
 var gravity = default_gravity
 
@@ -34,12 +34,13 @@ var hammer_data = {
 	"total_steps": 8,
 	"spin_progress": 8,
 	"spin_frames": [],
-	"default_position": Vector2(0, 50)
+	"default_position": Vector2(0, 20),
+	"swing_distance": 20
 }
 
 func _ready() -> void:
 	selections = [$none, $hammer, $pogo]
-	var swing_distance = 100
+	var swing_distance = hammer_data["swing_distance"]
 	for i in range(8):
 		var angle = (float(i)/hammer_data["total_steps"]) * (2 * PI)
 		hammer_data["spin_frames"].append(Vector2(cos(angle) * swing_distance, sin(angle) * swing_distance))
@@ -73,7 +74,7 @@ func process_pogo():
 func process_hammer():
 	var delay_scale = 3
 	
-	if Input.is_action_just_pressed("activate_hammer") and not is_on_floor():
+	if Input.is_action_just_pressed("activate_hammer") and time_since_on_ground > 1:
 		hammer_data["is_spinning"] = true
 	if Input.is_action_just_released("activate_hammer"):
 		hammer_data["is_spinning"] = false
@@ -81,16 +82,13 @@ func process_hammer():
 	if hammer_data["is_spinning"]:
 		hammer_data["spin_progress"] = (hammer_data["spin_progress"] + 1) % (hammer_data["total_steps"] * delay_scale)
 		var spin_progress = hammer_data["spin_progress"]
-		print("before: ", spin_progress)
 		if facing == direction.left:
 			spin_progress = (hammer_data["total_steps"] * delay_scale) - spin_progress - 1
-		print("after: ", spin_progress)
-		$hammer.position = hammer_data["spin_frames"][spin_progress / delay_scale]
+		$hammer.position = hammer_data["spin_frames"][spin_progress / delay_scale] + hammer_data["default_position"]
 	else:
 		hammer_data["spin_progress"] = 0
 		$hammer.position = hammer_data["default_position"]
 
-# Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
 	if is_on_floor():
 		time_since_on_ground = 0
@@ -108,6 +106,8 @@ func _process(delta: float) -> void:
 		facing = direction.right
 	elif movement_axes[0] == -1:
 		facing = direction.left
+	
+	$Sprite2D.flip_h = facing
 		
 	for i in range(len(selections)):
 		if i != selected:

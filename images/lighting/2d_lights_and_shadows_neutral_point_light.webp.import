@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://domaevnbemjyd"
-path="res://.godot/imported/tilemapStolen.jpeg-c986d50d7e2d467c16c3a81db5aaed70.ctex"
+uid="uid://dqi0bwonvj5xb"
+path="res://.godot/imported/2d_lights_and_shadows_neutral_point_light.webp-9c89d777a8d55ae43340c8b5cc730a6e.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://images/tilemapStolen.jpeg"
-dest_files=["res://.godot/imported/tilemapStolen.jpeg-c986d50d7e2d467c16c3a81db5aaed70.ctex"]
+source_file="res://images/lighting/2d_lights_and_shadows_neutral_point_light.webp"
+dest_files=["res://.godot/imported/2d_lights_and_shadows_neutral_point_light.webp-9c89d777a8d55ae43340c8b5cc730a6e.ctex"]
 
 [params]
 

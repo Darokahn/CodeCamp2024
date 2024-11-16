@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://d0x320syqgcww"
-path="res://.godot/imported/hammer.jpeg-aaf421fd4fb9c0342972a7c375a8abfb.ctex"
+uid="uid://dx4euyuf8tupp"
+path="res://.godot/imported/tileset.png-1e9c1a856e1d3d766efd91a182d7e25b.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://images/hammer.jpeg"
-dest_files=["res://.godot/imported/hammer.jpeg-aaf421fd4fb9c0342972a7c375a8abfb.ctex"]
+source_file="res://images/stages/tileset.png"
+dest_files=["res://.godot/imported/tileset.png-1e9c1a856e1d3d766efd91a182d7e25b.ctex"]
 
 [params]
 

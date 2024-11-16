@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dpemsaedevew4"
-path="res://.godot/imported/pogo.png-e65b336a253f2ec6f20fbaac32f7a63f.ctex"
+uid="uid://xkrtj2kgy8v6"
+path="res://.godot/imported/standing_sprite.png-41ef9904a5e915ab0acfb39c605a0425.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://images/pogo.png"
-dest_files=["res://.godot/imported/pogo.png-e65b336a253f2ec6f20fbaac32f7a63f.ctex"]
+source_file="res://images/player/standing_sprite.png"
+dest_files=["res://.godot/imported/standing_sprite.png-41ef9904a5e915ab0acfb39c605a0425.ctex"]
 
 [params]
 
