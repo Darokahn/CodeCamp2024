@@ -66,6 +66,7 @@ sources/0 = SubResource("TileSetAtlasSource_l7dy3")
 [node name="Level" type="Node2D"]
 
 [node name="ColorRect" type="ColorRect" parent="."]
+visible = false
 offset_left = -1542.0
 offset_top = -5016.0
 offset_right = 8083.0
@@ -77,6 +78,7 @@ tile_map_data = PackedByteArray("AAABAA4AAAAAAAEAAAABAA8AAAAAAAIAAAACAA4AAAABAAE
 tile_set = SubResource("TileSet_myotv")
 
 [node name="PointLight2D" type="PointLight2D" parent="."]
+visible = false
 position = Vector2(233, -448)
 scale = Vector2(32.1851, 31.0208)
 shadow_enabled = true
