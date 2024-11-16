@@ -13,10 +13,14 @@ var selected = selection.hammer
 
 var gravity = default_gravity
 
+var movement_values = Vector4()
+var movement_axes = Vector2()
+
 var last_valid_jump: int = 10
 var jump_frames = 6
-enum direction {left, right}
+enum direction {left, right, up, down}
 var facing: direction = direction.left
+var time_since_on_ground = 0
 
 var pogo_data = {
 	"time_since_attack_idle": 0,
@@ -24,25 +28,24 @@ var pogo_data = {
 }
 
 var hammer_data = {
+	"is_spinning": false,
 	"total_steps": 8,
 	"spin_progress": 8,
 	"spin_frames": [],
-	"default_position": Vector2()
+	"default_position": Vector2(0, 50)
 }
 
-# Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	selections = [$none, $hammer, $pogo]
 	var swing_distance = 100
 	for i in range(8):
 		var angle = (float(i)/hammer_data["total_steps"]) * (2 * PI)
 		hammer_data["spin_frames"].append(Vector2(cos(angle) * swing_distance, sin(angle) * swing_distance))
-	hammer_data["default_position"] = Vector2(0, 50)
 
 func big_pogo(launch_direction, highest_hit):
 	velocity += launch_direction * (3000 * highest_hit)
 
-func process_pogo():
+func process_pogo(movement_axes: Vector4):
 	var attack_direction = Vector2(Input.get_axis("arrow_left", "arrow_right"), Input.get_axis("arrow_up", "arrow_down"))
 	
 	$pogo.position = attack_direction * 100
@@ -63,23 +66,46 @@ func process_pogo():
 		pogo_data["time_since_attack_idle"] += 1
 	else:
 		pogo_data["time_since_attack_idle"] = 0
-		
-func process_hammer():
-	var delay_scale = 10
 
-	if Input.is_action_pressed("activate_hammer"):
+func process_hammer():
+	var delay_scale = 3
+	
+	if Input.is_action_just_pressed("activate_hammer") and not is_on_floor():
+		hammer_data["is_spinning"] = true
+	if Input.is_action_just_released("activate_hammer"):
+		hammer_data["is_spinning"] = false
+
+	if hammer_data["is_spinning"]:
 		hammer_data["spin_progress"] = (hammer_data["spin_progress"] + 1) % (hammer_data["total_steps"] * delay_scale)
+		var spin_progress = hammer_data["spin_progress"]
+		print("before: ", spin_progress)
 		if facing == direction.left:
-			hammer_data["spin_progress"] = hammer_data["total_steps"] - hammer_data["spin_progress"]
-		$hammer.position = hammer_data["spin_frames"][hammer_data["spin_progress"] / delay_scale]
-		print($hammer.position)
-		
+			spin_progress = (hammer_data["total_steps"] * delay_scale) - spin_progress - 1
+		print("after: ", spin_progress)
+		$hammer.position = hammer_data["spin_frames"][spin_progress / delay_scale]
 	else:
 		hammer_data["spin_progress"] = 0
 		$hammer.position = hammer_data["default_position"]
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
+	if is_on_floor():
+		time_since_on_ground = 0
+	else:
+		time_since_on_ground += 1
+	var strings = ["move_up", "move_down", "move_left", "move_right"]
+	movement_values = Vector4()
+	for i in range(4):
+		var string = strings[i]
+		movement_values[i] = int(Input.is_action_pressed(string))
+	
+	movement_axes = Vector2(-1 * movement_values[direction.up] + movement_values[direction.down], -1 * movement_values[direction.left] + movement_values[direction.right])
+	
+	if movement_axes[0] == 1:
+		facing = direction.right
+	elif movement_axes[0] == -1:
+		facing = direction.left
+		
 	for i in range(len(selections)):
 		if i != selected:
 			selections[i].visible = false
@@ -88,7 +114,7 @@ func _process(delta: float) -> void:
 	elif selected == selection.hammer:
 		process_hammer()
 	elif selected == selection.pogo:
-		process_pogo()
+		process_pogo(movement_axes)
 
 func _physics_process(delta: float) -> void:
 	if Input.is_action_just_pressed("move_up") and is_on_floor():
