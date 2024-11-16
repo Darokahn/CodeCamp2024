@@ -1,11 +1,12 @@
 extends CharacterBody2D
 
-@export var default_gravity = 40
+@export var default_gravity = 20
 @export var reduced_gravity = 20
 @export var speed = 20
 @export var friction = 0.9
 
 var player
+var prop = preload("res://scenes/debug.tscn")
 
 var selections
 enum selection {none, hammer, pogo}
@@ -17,11 +18,12 @@ var movement_values = Vector4()
 var movement_axes = Vector2()
 
 var last_valid_jump: int = 10
-var jump_frames = 6
+var jump_frames = 10
 enum direction {left, right, up, down}
 var facing: direction = direction.left
 var time_since_on_ground = 0
 var jump_force_per_frame = 100
+var jump_inertia = 0
 
 var pogo_data = {
 	"time_since_attack_idle": 0,
@@ -35,8 +37,15 @@ var hammer_data = {
 	"spin_progress": 8,
 	"spin_frames": [],
 	"default_position": Vector2(0, 20),
-	"swing_distance": 20
+	"swing_distance": 35,
+	"launch_scale": 400,
+	"spin_speed_scale": 2
 }
+
+func spawn_debug():
+	var debug = prop.instantiate()
+	debug.position = position
+	get_parent().add_child(debug)
 
 func _ready() -> void:
 	selections = [$none, $hammer, $pogo]
@@ -44,11 +53,13 @@ func _ready() -> void:
 	for i in range(8):
 		var angle = (float(i)/hammer_data["total_steps"]) * (2 * PI)
 		hammer_data["spin_frames"].append(Vector2(cos(angle) * swing_distance, sin(angle) * swing_distance))
+	hammer_data["last_position"] = hammer_data["spin_frames"][0]
 
-func big_pogo(launch_direction, highest_hit):
+func launch_pogo(launch_direction, highest_hit):
 	velocity += launch_direction * (pogo_data["launch_scale"] * highest_hit)
 
 func process_pogo():
+	
 	var attack_distance = 20
 	var attack_direction = Vector2(Input.get_axis("arrow_left", "arrow_right"), Input.get_axis("arrow_up", "arrow_down"))
 	
@@ -66,13 +77,18 @@ func process_pogo():
 					highest_hit = 1.5
 				else:
 					highest_hit = max(highest_hit, 1)
-			big_pogo(launch_direction, highest_hit)
+			launch_pogo(launch_direction, highest_hit)
 		pogo_data["time_since_attack_idle"] += 1
 	else:
 		pogo_data["time_since_attack_idle"] = 0
+		
+func launch_hammer(enemy_position):
+	var launch_vector = (position - enemy_position).normalized()
+	launch_vector *= hammer_data["launch_scale"]
+	velocity += launch_vector
 
 func process_hammer():
-	var delay_scale = 3
+	var delay_scale = hammer_data["spin_speed_scale"]
 	
 	if Input.is_action_just_pressed("activate_hammer") and time_since_on_ground > 1:
 		hammer_data["is_spinning"] = true
@@ -88,6 +104,11 @@ func process_hammer():
 	else:
 		hammer_data["spin_progress"] = 0
 		$hammer.position = hammer_data["default_position"]
+	
+	for object in $hammer.get_overlapping_bodies():
+		if "enemy" in object:
+			launch_hammer(object.position)
+			object.kill()
 
 func _process(delta: float) -> void:
 	if is_on_floor():
@@ -120,21 +141,29 @@ func _process(delta: float) -> void:
 		process_pogo()
 
 func _physics_process(delta: float) -> void:
-	if Input.is_action_just_pressed("move_up") and is_on_floor():
-		last_valid_jump = 0
-	else:
-		last_valid_jump += 1
+	if Input.is_action_just_pressed("move_up"):
+		if is_on_floor():
+				# last_valid_jump keeps track of how long it's been since the player could organically jump.
+				# As long as it has been less than jump_frames, the player can continue to to gain velocity
+				# by holding jump. Is set to 0 as long as
+				last_valid_jump = 0
+
 	var x_movement = Input.get_axis("move_left", "move_right")
-		
+
 	if Input.is_action_pressed("move_up"):
-		gravity = reduced_gravity
+		
+		gravity = reduced_gravity # player is slightly less affected by gravity while holding up
+		last_valid_jump += 1
+		if last_valid_jump < jump_frames:
+			velocity.y -= jump_force_per_frame
 	else:
 		gravity = default_gravity
+	
+
 	velocity.x += x_movement * speed
-	velocity.y += gravity
-	velocity *= friction
-	if last_valid_jump < jump_frames:
-		velocity.y -= jump_force_per_frame
+	velocity.y += gravity 
+	velocity *= friction # reduce velocity so player stops moving eventually
+
 	move_and_slide()
 
 func _integrate_forces(state: PhysicsDirectBodyState2D) -> void:
