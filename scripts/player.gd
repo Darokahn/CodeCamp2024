@@ -32,7 +32,7 @@ func _process(delta: float) -> void:
 	var launch_direction = attack_direction * -1
 	
 	if attack_direction.length() > 0:
-		if time_since_attack_idle < 7:
+		if time_since_attack_idle < 4:
 			if not is_on_floor():
 				var highest_hit = 0
 				for object in hit_objects:
