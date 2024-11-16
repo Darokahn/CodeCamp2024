@@ -25,6 +25,8 @@ var time_since_on_ground = 0
 var jump_force_per_frame = 100
 var jump_inertia = 0
 
+var running
+
 var pogo_data = {
 	"time_since_attack_idle": 0,
 	"time_since_big_attack": 0,
@@ -129,6 +131,12 @@ func _process(delta: float) -> void:
 		facing = direction.left
 	
 	$Sprite2D.flip_h = facing
+	
+	if movement_axes[0]:
+		if not running:
+			$Sprite2D.play("run")
+	else:
+		$Sprite2D.play("default")
 		
 	for i in range(len(selections)):
 		if i != selected:
