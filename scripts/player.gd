@@ -1,7 +1,7 @@
 extends CharacterBody2D
 
-@export var default_gravity = 200
-@export var reduced_gravity = 170
+@export var default_gravity = 40
+@export var reduced_gravity = 20
 @export var speed = 20
 @export var friction = 0.9
 
@@ -21,10 +21,12 @@ var jump_frames = 6
 enum direction {left, right, up, down}
 var facing: direction = direction.left
 var time_since_on_ground = 0
+var jump_force_per_frame = 100
 
 var pogo_data = {
 	"time_since_attack_idle": 0,
-	"time_since_big_attack": 0
+	"time_since_big_attack": 0,
+	"launch_scale": 500
 }
 
 var hammer_data = {
@@ -43,12 +45,13 @@ func _ready() -> void:
 		hammer_data["spin_frames"].append(Vector2(cos(angle) * swing_distance, sin(angle) * swing_distance))
 
 func big_pogo(launch_direction, highest_hit):
-	velocity += launch_direction * (1500 * highest_hit)
+	velocity += launch_direction * (pogo_data["launch_scale"] * highest_hit)
 
-func process_pogo(movement_axes: Vector4):
+func process_pogo():
+	var attack_distance = 20
 	var attack_direction = Vector2(Input.get_axis("arrow_left", "arrow_right"), Input.get_axis("arrow_up", "arrow_down"))
 	
-	$pogo.position = attack_direction * 100
+	$pogo.position = attack_direction.normalized() * attack_distance
 	
 	var hit_objects = $pogo.get_overlapping_bodies()
 	
@@ -114,7 +117,7 @@ func _process(delta: float) -> void:
 	elif selected == selection.hammer:
 		process_hammer()
 	elif selected == selection.pogo:
-		process_pogo(movement_axes)
+		process_pogo()
 
 func _physics_process(delta: float) -> void:
 	if Input.is_action_just_pressed("move_up") and is_on_floor():
@@ -131,7 +134,7 @@ func _physics_process(delta: float) -> void:
 	velocity.y += gravity
 	velocity *= friction
 	if last_valid_jump < jump_frames:
-		velocity.y -= 350
+		velocity.y -= jump_force_per_frame
 	move_and_slide()
 
 func _integrate_forces(state: PhysicsDirectBodyState2D) -> void:
