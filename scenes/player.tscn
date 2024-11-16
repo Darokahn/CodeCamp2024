@@ -1,17 +1,20 @@
-[gd_scene load_steps=7 format=3 uid="uid://c76qrvto8amjm"]
+[gd_scene load_steps=9 format=3 uid="uid://c76qrvto8amjm"]
 
 [ext_resource type="Script" path="res://scripts/player.gd" id="1_e67xg"]
 [ext_resource type="Texture2D" uid="uid://cr6am8gf643pv" path="res://icon.svg" id="1_g4ak1"]
-[ext_resource type="Texture2D" uid="uid://b83s7etdb848t" path="res://images/pngwing.com.png" id="3_7llqh"]
+[ext_resource type="Texture2D" uid="uid://dpemsaedevew4" path="res://images/pogo.png" id="3_0twfa"]
+[ext_resource type="Texture2D" uid="uid://d0x320syqgcww" path="res://images/hammer.jpeg" id="4_jpb4i"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_tb4vh"]
 radius = 64.0078
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_1oxex"]
-radius = 51.1566
+radius = 40.7128
 
 [sub_resource type="OccluderPolygon2D" id="OccluderPolygon2D_cd60y"]
 polygon = PackedVector2Array(50, -62, 61, -52, 61, 50, 51, 60, -50, 60, -60, 51, -60, -51, -51, -62)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_se774"]
 
 [node name="Player" type="CharacterBody2D"]
 script = ExtResource("1_e67xg")
@@ -22,18 +25,18 @@ shape = SubResource("CircleShape2D_tb4vh")
 [node name="Sprite2D" type="Sprite2D" parent="."]
 texture = ExtResource("1_g4ak1")
 
-[node name="weaponBox" type="Area2D" parent="."]
+[node name="pogo" type="Area2D" parent="."]
 scale = Vector2(2.04, 2.04)
 collision_layer = 2
 collision_mask = 2
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="weaponBox"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="pogo"]
 shape = SubResource("CircleShape2D_1oxex")
 
-[node name="Sprite2D" type="Sprite2D" parent="weaponBox"]
-position = Vector2(-3.00009, 5.99995)
-scale = Vector2(0.037234, 0.037234)
-texture = ExtResource("3_7llqh")
+[node name="Sprite2D" type="Sprite2D" parent="pogo"]
+position = Vector2(4.76837e-07, 7.35294)
+scale = Vector2(0.105316, 0.105316)
+texture = ExtResource("3_0twfa")
 
 [node name="Camera2D" type="Camera2D" parent="."]
 zoom = Vector2(0.5, 0.5)
@@ -41,3 +44,16 @@ position_smoothing_enabled = true
 
 [node name="LightOccluder2D" type="LightOccluder2D" parent="."]
 occluder = SubResource("OccluderPolygon2D_cd60y")
+
+[node name="hammer" type="Area2D" parent="."]
+scale = Vector2(2.04, 2.04)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="hammer"]
+shape = SubResource("RectangleShape2D_se774")
+
+[node name="Sprite2D" type="Sprite2D" parent="hammer"]
+position = Vector2(0, 10.7843)
+scale = Vector2(0.169935, 0.169935)
+texture = ExtResource("4_jpb4i")
+
+[node name="none" type="Area2D" parent="."]
