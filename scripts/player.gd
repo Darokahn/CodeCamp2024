@@ -5,6 +5,8 @@ extends CharacterBody2D
 @export var speed = 100
 @export var friction = 0.9
 
+var player
+
 var selections
 enum selection {none, hammer, pogo}
 var selected = selection.pogo
