@@ -12,6 +12,9 @@ var random = RandomNumberGenerator.new()
 
 var health = 10
 
+func _ready():
+	$Sprite2D.play("walk")
+
 func kill():
 	if alive:
 		alive = false
@@ -31,6 +34,7 @@ func _process(delta: float) -> void:
 
 func _physics_process(delta: float) -> void:
 	if alive:
+		$Sprite2D.flip_h = x_direction > 0
 		velocity.x = x_direction * 75
 		if is_on_wall() and time_since_hit_wall > 3:
 			x_direction *= -1

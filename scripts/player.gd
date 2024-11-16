@@ -44,6 +44,8 @@ var hammer_data = {
 	"spin_speed_scale": 2
 }
 
+var animation_state = "default"
+
 func spawn_debug():
 	var debug = prop.instantiate()
 	debug.position = position
@@ -61,7 +63,6 @@ func launch_pogo(launch_direction, highest_hit):
 	velocity += launch_direction * (pogo_data["launch_scale"] * highest_hit)
 
 func process_pogo():
-	
 	var attack_distance = 20
 	var attack_direction = Vector2(Input.get_axis("arrow_left", "arrow_right"), Input.get_axis("arrow_up", "arrow_down"))
 	
@@ -111,6 +112,27 @@ func process_hammer():
 		if "enemy" in object:
 			launch_hammer(object.position)
 			object.kill()
+			print("kill")
+
+func process_animation():
+	var past_state = animation_state
+	var movement_threshold = 2
+	var on_floor = is_on_floor()
+	if on_floor:
+		if velocity.length() < movement_threshold:
+			animation_state = "default"
+		elif abs(velocity.x) > movement_threshold:
+			animation_state = "run"
+	else:
+		if hammer_data["is_spinning"]:
+			animation_state = "roll"
+		elif velocity.y > 0:
+			animation_state = "fall"
+		else:
+			animation_state = "jump"
+	if animation_state != past_state:
+		print("lol")
+		$Sprite2D.play(animation_state)
 
 func _process(delta: float) -> void:
 	if is_on_floor():
@@ -132,11 +154,7 @@ func _process(delta: float) -> void:
 	
 	$Sprite2D.flip_h = facing
 	
-	if movement_axes[0]:
-		if not running:
-			$Sprite2D.play("run")
-	else:
-		$Sprite2D.play("default")
+	process_animation()
 		
 	for i in range(len(selections)):
 		if i != selected:

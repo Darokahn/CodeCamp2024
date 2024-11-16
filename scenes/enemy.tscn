@@ -1,13 +1,25 @@
-[gd_scene load_steps=5 format=3 uid="uid://b6wqa0e7p2kid"]
+[gd_scene load_steps=6 format=3 uid="uid://b6wqa0e7p2kid"]
 
-[ext_resource type="Texture2D" uid="uid://dicmfu0s7pu7u" path="res://images/temp/enemy.png" id="1_8dk07"]
 [ext_resource type="Script" path="res://scripts/enemy.gd" id="1_m85v6"]
+[ext_resource type="Texture2D" uid="uid://8m5fpb21ujdb" path="res://images/enemies/enemy2.png" id="2_cabda"]
+[ext_resource type="Texture2D" uid="uid://deq5d08u58edt" path="res://images/enemies/enemy.png" id="3_wwkmd"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_sdawe"]
 radius = 6.08276
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_lrbah"]
-size = Vector2(14, 9)
+[sub_resource type="SpriteFrames" id="SpriteFrames_c0ug8"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2_cabda")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_wwkmd")
+}],
+"loop": true,
+"name": &"walk",
+"speed": 1.0
+}]
 
 [node name="Enemy" type="CharacterBody2D"]
 collision_layer = 3
@@ -15,15 +27,11 @@ collision_mask = 2
 script = ExtResource("1_m85v6")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(-1, -6)
+scale = Vector2(2.4, 2.4)
 shape = SubResource("CircleShape2D_sdawe")
 
-[node name="onGround" type="Area2D" parent="."]
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="onGround"]
-position = Vector2(0, 1)
-shape = SubResource("RectangleShape2D_lrbah")
-
-[node name="Sprite2D" type="Sprite2D" parent="."]
-position = Vector2(-1, -1)
-scale = Vector2(0.04, 0.04)
-texture = ExtResource("1_8dk07")
+[node name="Sprite2D" type="AnimatedSprite2D" parent="."]
+position = Vector2(-1, -16)
+sprite_frames = SubResource("SpriteFrames_c0ug8")
+animation = &"walk"
