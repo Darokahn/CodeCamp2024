@@ -24,9 +24,7 @@ script = SubResource("GDScript_dshhx")
 position = Vector2(-359, 23)
 
 [node name="Player" parent="." instance=ExtResource("2_u2vts")]
-position = Vector2(489, 318)
-speed = 20
-friction = 0.9
+position = Vector2(-48, 454)
 
 [node name="Enemy" parent="." instance=ExtResource("3_gs6pr")]
 position = Vector2(864, 336)

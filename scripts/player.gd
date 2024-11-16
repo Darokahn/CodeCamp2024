@@ -1,6 +1,7 @@
 extends CharacterBody2D
 
-@export var default_gravity = 40
+var inertia = 0
+@export var default_gravity = 20
 @export var reduced_gravity = 20
 @export var speed = 20
 @export var friction = 0.9
@@ -13,6 +14,7 @@ var selected = selection.hammer
 
 var gravity = default_gravity
 
+
 var movement_values = Vector4()
 var movement_axes = Vector2()
 
@@ -22,6 +24,8 @@ enum direction {left, right, up, down}
 var facing: direction = direction.left
 var time_since_on_ground = 0
 var jump_force_per_frame = 100
+
+var running = false
 
 var pogo_data = {
 	"time_since_attack_idle": 0,
@@ -89,6 +93,7 @@ func process_hammer():
 		hammer_data["spin_progress"] = 0
 		$hammer.position = hammer_data["default_position"]
 
+#runs every frame
 func _process(delta: float) -> void:
 	if is_on_floor():
 		time_since_on_ground = 0
@@ -102,12 +107,23 @@ func _process(delta: float) -> void:
 	
 	movement_axes = Vector2(-1 * movement_values[direction.up] + movement_values[direction.down], -1 * movement_values[direction.left] + movement_values[direction.right])
 	
+	#flipping based on button held
 	if movement_axes[0] == 1:
 		facing = direction.right
 	elif movement_axes[0] == -1:
 		facing = direction.left
 	
 	$Sprite2D.flip_h = facing
+	
+	#Running Animation
+	if movement_axes[0]:
+		if not running:
+			$Sprite2D.play("run")
+			running = true
+	else:
+		$Sprite2D.play("default")
+		running = false
+		
 		
 	for i in range(len(selections)):
 		if i != selected:
@@ -119,19 +135,29 @@ func _process(delta: float) -> void:
 	elif selected == selection.pogo:
 		process_pogo()
 
+#plays every frame
 func _physics_process(delta: float) -> void:
 	if Input.is_action_just_pressed("move_up") and is_on_floor():
 		last_valid_jump = 0
 	else:
 		last_valid_jump += 1
 	var x_movement = Input.get_axis("move_left", "move_right")
-		
-	if Input.is_action_pressed("move_up"):
-		gravity = reduced_gravity
+	
+	if Input.is_action_pressed("move_up") and is_on_floor():
+		inertia = 100
+	elif Input.is_action_pressed("move_up") and inertia > 50:
+		inertia -= 10
 	else:
-		gravity = default_gravity
+		if inertia > 0:
+			inertia -= 35
+		if inertia < 0:
+			inertia -= 10
+	
 	velocity.x += x_movement * speed
-	velocity.y += gravity
+	#flies up cuz inertia
+	velocity.y -= inertia
+	#adds gravity
+	velocity.y += gravity + inertia *0.2
 	velocity *= friction
 	if last_valid_jump < jump_frames:
 		velocity.y -= jump_force_per_frame
