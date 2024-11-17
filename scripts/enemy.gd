@@ -27,13 +27,21 @@ func kill():
 		var death_vector = Vector2((randi() % 400) - 200, - (randi() % 200) - 50)
 		var offset = Vector2((randi() % 10) - 5, (randi() % 10) - 5)
 		corpse_instance.apply_impulse(death_vector, offset)
-	
+		self.set_collision_mask_value(1, false)
+		self.set_collision_mask_value(2, false)
+		self.set_collision_layer_value(1, false)
+		self.set_collision_layer_value(2, false)
+		
 func _process(delta: float) -> void:
 	pass
 	
 
 func _physics_process(delta: float) -> void:
 	if alive:
+		var collision_objects = $Area2D.get_overlapping_bodies()
+		for object in collision_objects:
+			if "player" in object:
+				object.restart()
 		$Sprite2D.flip_h = x_direction > 0
 		velocity.x = x_direction * 75
 		if is_on_wall() and time_since_hit_wall > 3:

@@ -8,9 +8,11 @@ extends CharacterBody2D
 var player
 var prop = preload("res://scenes/debug.tscn")
 
+var initial_position
+
 var selections
 enum selection {none, hammer, pogo}
-var selected = selection.hammer
+var selected = selection.pogo
 
 var gravity = default_gravity
 
@@ -25,7 +27,7 @@ var time_since_on_ground = 0
 var jump_force_per_frame = 100
 var jump_inertia = 0
 
-var initial_position
+var running
 
 var pogo_data = {
 	"time_since_attack_idle": 0,
@@ -39,8 +41,8 @@ var hammer_data = {
 	"spin_progress": 8,
 	"spin_frames": [],
 	"default_position": Vector2(0, 20),
-	"swing_distance": 20,
-	"launch_scale": 1000,
+	"swing_distance": 35,
+	"launch_scale": 400,
 	"spin_speed_scale": 2
 }
 
@@ -59,7 +61,8 @@ func _ready() -> void:
 		var angle = (float(i)/hammer_data["total_steps"]) * (2 * PI)
 		hammer_data["spin_frames"].append(Vector2(cos(angle) * swing_distance, sin(angle) * swing_distance))
 	hammer_data["last_position"] = hammer_data["spin_frames"][0]
-	
+
+
 func restart():
 	position = initial_position
 
@@ -99,26 +102,16 @@ func process_hammer():
 	
 	if Input.is_action_just_pressed("activate_hammer") and time_since_on_ground > 1:
 		hammer_data["is_spinning"] = true
-		$CollisionShape2D.scale = Vector2(0.1, 0.1)
-	if Input.is_action_just_released("activate_hammer") or time_since_on_ground < 1:
+	if Input.is_action_just_released("activate_hammer"):
 		hammer_data["is_spinning"] = false
-		$CollisionShape2D.scale = Vector2(0.5, 0.5)
 
 	if hammer_data["is_spinning"]:
 		hammer_data["spin_progress"] = (hammer_data["spin_progress"] + 1) % (hammer_data["total_steps"] * delay_scale)
 		var spin_progress = hammer_data["spin_progress"]
-		var int_step = spin_progress / delay_scale
-		var spin_angle = (2 * PI) / hammer_data["total_steps"] * int_step
 		if facing == direction.left:
-			spin_angle *= -1
 			spin_progress = (hammer_data["total_steps"] * delay_scale) - spin_progress - 1
-		
-		$hammer.position = hammer_data["spin_frames"][int_step] + hammer_data["default_position"]
-		if int_step % 2 == 1:
-			$Sprite2D.rotation = spin_angle
-		
+		$hammer.position = hammer_data["spin_frames"][spin_progress / delay_scale] + hammer_data["default_position"]
 	else:
-		$Sprite2D.rotation = 0
 		hammer_data["spin_progress"] = 0
 		$hammer.position = hammer_data["default_position"]
 	
@@ -130,7 +123,7 @@ func process_hammer():
 
 func process_animation():
 	var past_state = animation_state
-	var movement_threshold = 5
+	var movement_threshold = 2
 	var on_floor = is_on_floor()
 	if on_floor:
 		if velocity.length() < movement_threshold:
@@ -149,9 +142,6 @@ func process_animation():
 		$Sprite2D.play(animation_state)
 
 func _process(delta: float) -> void:
-	if Input.is_action_just_pressed("switch"):
-		selected = (selected + 1) % 3
-		print(selected)
 	if is_on_floor():
 		time_since_on_ground = 0
 	else:
@@ -172,14 +162,13 @@ func _process(delta: float) -> void:
 	$Sprite2D.flip_h = facing
 	
 	process_animation()
-	
-	process_hammer()
 		
 	for i in range(len(selections)):
-		selections[i].visible = i == selected
+		if i != selected:
+			selections[i].visible = false
 	if selected == selection.none:
 		""
-	
+		process_hammer()
 	elif selected == selection.pogo:
 		process_pogo()
 

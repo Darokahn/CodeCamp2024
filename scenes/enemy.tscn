@@ -1,8 +1,9 @@
-[gd_scene load_steps=6 format=3 uid="uid://b6wqa0e7p2kid"]
+[gd_scene load_steps=8 format=3 uid="uid://b6wqa0e7p2kid"]
 
 [ext_resource type="Script" path="res://scripts/enemy.gd" id="1_m85v6"]
 [ext_resource type="Texture2D" uid="uid://8m5fpb21ujdb" path="res://images/enemies/enemy2.png" id="2_cabda"]
 [ext_resource type="Texture2D" uid="uid://deq5d08u58edt" path="res://images/enemies/enemy.png" id="3_wwkmd"]
+[ext_resource type="Script" path="res://Globals.gd" id="4_5m31w"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_sdawe"]
 radius = 6.08276
@@ -21,17 +22,26 @@ animations = [{
 "speed": 1.0
 }]
 
+[sub_resource type="CircleShape2D" id="CircleShape2D_4pmqw"]
+radius = 16.0
+
 [node name="Enemy" type="CharacterBody2D"]
 collision_layer = 3
-collision_mask = 2
+collision_mask = 3
 script = ExtResource("1_m85v6")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2(-1, -6)
+position = Vector2(-5.96046e-08, -4.76837e-07)
 scale = Vector2(2.4, 2.4)
 shape = SubResource("CircleShape2D_sdawe")
 
 [node name="Sprite2D" type="AnimatedSprite2D" parent="."]
-position = Vector2(-1, -16)
+position = Vector2(0, -9)
 sprite_frames = SubResource("SpriteFrames_c0ug8")
 animation = &"walk"
+script = ExtResource("4_5m31w")
+
+[node name="Area2D" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+shape = SubResource("CircleShape2D_4pmqw")

@@ -77,7 +77,13 @@ tile_map_data = PackedByteArray("AAABAA4AAAAAAAEAAAABAA8AAAAAAAIAAAACAA4AAAABAAE
 tile_set = SubResource("TileSet_myotv")
 
 [node name="PointLight2D" type="PointLight2D" parent="."]
-position = Vector2(233, -448)
+position = Vector2(511, -317)
+scale = Vector2(32.1851, 31.0208)
+shadow_enabled = true
+texture = ExtResource("2_6yv6g")
+
+[node name="PointLight2D2" type="PointLight2D" parent="."]
+position = Vector2(511, -317)
 scale = Vector2(32.1851, 31.0208)
 shadow_enabled = true
 texture = ExtResource("2_6yv6g")

@@ -3,21 +3,33 @@
 [ext_resource type="Script" path="res://scripts/player.gd" id="1_e67xg"]
 [ext_resource type="Texture2D" uid="uid://xkrtj2kgy8v6" path="res://images/player/standing_sprite.png" id="2_8xrsf"]
 [ext_resource type="Texture2D" uid="uid://dpemsaedevew4" path="res://images/temp/pogo.png" id="3_0twfa"]
-[ext_resource type="Texture2D" uid="uid://dqwhfabl77g3s" path="res://images/player/running/run1.png" id="3_2i01x"]
 [ext_resource type="Texture2D" uid="uid://c4m51sw0d45pt" path="res://images/player/fall/jump2.png" id="3_jm28h"]
-[ext_resource type="Texture2D" uid="uid://43kaamlrlad0" path="res://images/player/running/run2.png" id="4_5iqbu"]
 [ext_resource type="Texture2D" uid="uid://coa70a8nl4h6e" path="res://images/player/jump/jump.png" id="4_dsoso"]
-[ext_resource type="Texture2D" uid="uid://d0x320syqgcww" path="res://images/temp/hammer.jpeg" id="4_jpb4i"]
 [ext_resource type="Texture2D" uid="uid://dq07wkidgkp8q" path="res://images/player/roll/hammer_smash.png" id="5_j7w1x"]
-[ext_resource type="Texture2D" uid="uid://7f1epjrafpca" path="res://images/player/running/run3.png" id="5_nk8j3"]
 [ext_resource type="Texture2D" uid="uid://cojfgcwjgoc84" path="res://images/player/roll/new_attack.png" id="6_a0bra"]
-[ext_resource type="Texture2D" uid="uid://bo1nk04tcim5t" path="res://images/player/running/run4.png" id="6_fr3q7"]
-[ext_resource type="Texture2D" uid="uid://dxp723pha6cjg" path="res://images/player/running/run5.png" id="7_sejla"]
-[ext_resource type="Texture2D" uid="uid://buk5n1ihroaoo" path="res://images/player/running/run6.png" id="8_ckhgw"]
+[ext_resource type="PackedScene" uid="uid://bnjolnjffwe01" path="res://scenes/background.tscn" id="8_byax4"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_jpt1o"]
 radius = 20.0
 height = 72.0
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_1o0mk"]
+load_path = "res://.godot/imported/run1.png-a4ec740d9f0b65b1d7655eb2713dc9e0.ctex"
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_spmpa"]
+load_path = "res://.godot/imported/run2.png-9816fbd5d8cce0487b5966f9b5e520e9.ctex"
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_bklmi"]
+load_path = "res://.godot/imported/run3.png-a4fa71bb1727aa9e5606ebc00009a1e4.ctex"
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_n3xkg"]
+load_path = "res://.godot/imported/run4.png-a708ef19ced743ef12224643cbffb9ca.ctex"
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_ev65i"]
+load_path = "res://.godot/imported/run5.png-caef15803c25a12f1f1bc3fbef157144.ctex"
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_m2ao6"]
+load_path = "res://.godot/imported/run6.png-aac1001750d84fec12b6f1915add1888.ctex"
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_fuukm"]
 animations = [{
@@ -58,22 +70,22 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": ExtResource("3_2i01x")
+"texture": SubResource("CompressedTexture2D_1o0mk")
 }, {
 "duration": 1.0,
-"texture": ExtResource("4_5iqbu")
+"texture": SubResource("CompressedTexture2D_spmpa")
 }, {
 "duration": 1.0,
-"texture": ExtResource("5_nk8j3")
+"texture": SubResource("CompressedTexture2D_bklmi")
 }, {
 "duration": 1.0,
-"texture": ExtResource("6_fr3q7")
+"texture": SubResource("CompressedTexture2D_n3xkg")
 }, {
 "duration": 1.0,
-"texture": ExtResource("7_sejla")
+"texture": SubResource("CompressedTexture2D_ev65i")
 }, {
 "duration": 1.0,
-"texture": ExtResource("8_ckhgw")
+"texture": SubResource("CompressedTexture2D_m2ao6")
 }],
 "loop": true,
 "name": &"run",
@@ -84,7 +96,7 @@ animations = [{
 radius = 24.0
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_se774"]
-size = Vector2(48, 48)
+size = Vector2(80, 72)
 
 [node name="Player" type="CharacterBody2D"]
 position = Vector2(-1, -3)
@@ -118,12 +130,15 @@ texture = ExtResource("3_0twfa")
 [node name="Camera2D" type="Camera2D" parent="."]
 position = Vector2(2, 6)
 scale = Vector2(0.5, 0.5)
-zoom = Vector2(4, 4)
+zoom = Vector2(3, 3)
 position_smoothing_enabled = true
 position_smoothing_speed = 3.0
 drag_vertical_enabled = true
 
+[node name="Background" parent="Camera2D" instance=ExtResource("8_byax4")]
+
 [node name="hammer" type="Area2D" parent="."]
+visible = false
 position = Vector2(0, 19)
 scale = Vector2(0.5, 0.5)
 
@@ -131,11 +146,6 @@ scale = Vector2(0.5, 0.5)
 position = Vector2(4, -26)
 scale = Vector2(0.5, 0.5)
 shape = SubResource("RectangleShape2D_se774")
-
-[node name="Sprite2D" type="Sprite2D" parent="hammer"]
-position = Vector2(4, -26)
-scale = Vector2(0.106667, 0.106667)
-texture = ExtResource("4_jpb4i")
 
 [node name="none" type="Area2D" parent="."]
 position = Vector2(2, 6)
