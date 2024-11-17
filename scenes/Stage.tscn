@@ -83,7 +83,6 @@ script = SubResource("GDScript_dshhx")
 
 [node name="Level" type="Node2D" parent="."]
 position = Vector2(-359, 23)
-scale = Vector2(1.5, 1.5)
 
 [node name="TileMapLayer" type="TileMapLayer" parent="Level"]
 position = Vector2(46.6667, -17.3333)
@@ -106,7 +105,7 @@ texture = ExtResource("2_homom")
 position = Vector2(640, 419)
 
 [node name="Enemy" parent="." instance=ExtResource("3_gs6pr")]
-position = Vector2(201, 618)
+position = Vector2(569, 459)
 scale = Vector2(1.15999, 1.15999)
 
 [node name="Enemy2" parent="." instance=ExtResource("3_gs6pr")]
