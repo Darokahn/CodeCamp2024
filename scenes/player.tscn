@@ -1,4 +1,4 @@
-[gd_scene load_steps=19 format=3 uid="uid://c76qrvto8amjm"]
+[gd_scene load_steps=18 format=3 uid="uid://c76qrvto8amjm"]
 
 [ext_resource type="Script" path="res://scripts/player.gd" id="1_e67xg"]
 [ext_resource type="Texture2D" uid="uid://xkrtj2kgy8v6" path="res://images/player/standing_sprite.png" id="2_8xrsf"]
@@ -7,7 +7,6 @@
 [ext_resource type="Texture2D" uid="uid://coa70a8nl4h6e" path="res://images/player/jump/jump.png" id="4_dsoso"]
 [ext_resource type="Texture2D" uid="uid://dq07wkidgkp8q" path="res://images/player/roll/hammer_smash.png" id="5_j7w1x"]
 [ext_resource type="Texture2D" uid="uid://cojfgcwjgoc84" path="res://images/player/roll/new_attack.png" id="6_a0bra"]
-[ext_resource type="PackedScene" uid="uid://bnjolnjffwe01" path="res://scenes/background.tscn" id="8_byax4"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_jpt1o"]
 radius = 20.0
@@ -95,13 +94,12 @@ animations = [{
 [sub_resource type="CircleShape2D" id="CircleShape2D_1oxex"]
 radius = 24.0
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_se774"]
-size = Vector2(80, 72)
+[sub_resource type="CircleShape2D" id="CircleShape2D_mmpo1"]
+radius = 80.0999
 
 [node name="Player" type="CharacterBody2D"]
 position = Vector2(-1, -3)
 script = ExtResource("1_e67xg")
-default_gravity = 50
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(2, 6)
@@ -110,7 +108,6 @@ shape = SubResource("CapsuleShape2D_jpt1o")
 
 [node name="Sprite2D" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_fuukm")
-animation = &"roll"
 
 [node name="pogo" type="Area2D" parent="."]
 scale = Vector2(0.5, 0.5)
@@ -135,17 +132,14 @@ position_smoothing_enabled = true
 position_smoothing_speed = 3.0
 drag_vertical_enabled = true
 
-[node name="Background" parent="Camera2D" instance=ExtResource("8_byax4")]
-
 [node name="hammer" type="Area2D" parent="."]
-visible = false
 position = Vector2(0, 19)
 scale = Vector2(0.5, 0.5)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="hammer"]
 position = Vector2(4, -26)
 scale = Vector2(0.5, 0.5)
-shape = SubResource("RectangleShape2D_se774")
+shape = SubResource("CircleShape2D_mmpo1")
 
 [node name="none" type="Area2D" parent="."]
 position = Vector2(2, 6)

@@ -52,3 +52,4 @@ func _physics_process(delta: float) -> void:
 			velocity += get_gravity() * delta
 		time_since_hit_wall += 1
 		move_and_slide()
+		$Sprite2D.rotation = 0.3 * $Sprite2D.frame

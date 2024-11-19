@@ -1,13 +1,20 @@
-[gd_scene load_steps=3 format=3 uid="uid://cmbgw8cwr7are"]
+[gd_scene load_steps=7 format=3 uid="uid://cmbgw8cwr7are"]
 
 [ext_resource type="Texture2D" uid="uid://d0x320syqgcww" path="res://images/temp/hammer.jpeg" id="1_4hbky"]
+[ext_resource type="Script" path="res://scripts/corpse.gd" id="1_oc43q"]
+[ext_resource type="Texture2D" uid="uid://cr6am8gf643pv" path="res://icon.svg" id="3_43ph0"]
+[ext_resource type="Shader" path="res://shaders/corpseParticle.gdshader" id="3_exh1f"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_b2nk4"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_7vbi1"]
+shader = ExtResource("3_exh1f")
 
 [node name="Corpse" type="RigidBody2D"]
 collision_layer = 0
 collision_mask = 0
 inertia = 1000.0
+script = ExtResource("1_oc43q")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("CircleShape2D_b2nk4")
@@ -16,3 +23,7 @@ shape = SubResource("CircleShape2D_b2nk4")
 visible = false
 scale = Vector2(0.16, 0.16)
 texture = ExtResource("1_4hbky")
+
+[node name="GPUParticles2D" type="GPUParticles2D" parent="."]
+process_material = SubResource("ShaderMaterial_7vbi1")
+texture = ExtResource("3_43ph0")

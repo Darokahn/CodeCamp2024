@@ -1,7 +1,7 @@
 extends CharacterBody2D
 
-@export var default_gravity = 20
-@export var reduced_gravity = 20
+@export var default_gravity = 50
+@export var reduced_gravity = 40
 @export var speed = 20
 @export var friction = 0.9
 
@@ -26,6 +26,13 @@ var jump_force_per_frame = 100
 var jump_inertia = 0
 
 var initial_position
+
+var jump_data = {
+	"jump_frames": 8,
+	"last_valid_jump": 10,
+	"force": 150,
+	"jump_acceleration": 0
+}
 
 var pogo_data = {
 	"time_since_attack_idle": 0,
@@ -105,6 +112,10 @@ func process_hammer():
 		$CollisionShape2D.scale = Vector2(0.5, 0.5)
 
 	if hammer_data["is_spinning"]:
+		for object in $hammer.get_overlapping_bodies():
+			if "enemy" in object:
+				launch_hammer(object.position)
+				object.kill()
 		hammer_data["spin_progress"] = (hammer_data["spin_progress"] + 1) % (hammer_data["total_steps"] * delay_scale)
 		var spin_progress = hammer_data["spin_progress"]
 		var int_step = spin_progress / delay_scale
@@ -113,7 +124,6 @@ func process_hammer():
 			spin_angle *= -1
 			spin_progress = (hammer_data["total_steps"] * delay_scale) - spin_progress - 1
 		
-		$hammer.position = hammer_data["spin_frames"][int_step] + hammer_data["default_position"]
 		if int_step % 2 == 1:
 			$Sprite2D.rotation = spin_angle
 		
@@ -121,21 +131,15 @@ func process_hammer():
 		$Sprite2D.rotation = 0
 		hammer_data["spin_progress"] = 0
 		$hammer.position = hammer_data["default_position"]
-	
-	for object in $hammer.get_overlapping_bodies():
-		if "enemy" in object:
-			launch_hammer(object.position)
-			object.kill()
-			print("kill")
 
 func process_animation():
 	var past_state = animation_state
-	var movement_threshold = 5
+	var movement_threshold = 30
 	var on_floor = is_on_floor()
 	if on_floor:
 		if velocity.length() < movement_threshold:
 			animation_state = "default"
-		elif abs(velocity.x) > movement_threshold:
+		elif abs(velocity.x) > movement_threshold and not is_on_wall():
 			animation_state = "run"
 	else:
 		if hammer_data["is_spinning"]:
@@ -145,13 +149,11 @@ func process_animation():
 		else:
 			animation_state = "jump"
 	if animation_state != past_state:
-		print("lol")
 		$Sprite2D.play(animation_state)
 
 func _process(delta: float) -> void:
 	if Input.is_action_just_pressed("switch"):
 		selected = (selected + 1) % 3
-		print(selected)
 	if is_on_floor():
 		time_since_on_ground = 0
 	else:
@@ -184,30 +186,49 @@ func _process(delta: float) -> void:
 		process_pogo()
 
 func _physics_process(delta: float) -> void:
-	if Input.is_action_just_pressed("move_up"):
-		if is_on_floor():
-				# last_valid_jump keeps track of how long it's been since the player could organically jump.
-				# As long as it has been less than jump_frames, the player can continue to to gain velocity
-				# by holding jump. Is set to 0 as long as
-				last_valid_jump = 0
-
 	var x_movement = Input.get_axis("move_left", "move_right")
-
-	if Input.is_action_pressed("move_up"):
-		
-		gravity = reduced_gravity # player is slightly less affected by gravity while holding up
-		last_valid_jump += 1
-		if last_valid_jump < jump_frames:
-			velocity.y -= jump_force_per_frame
+	if is_on_floor():
+		jump_data["last_valid_jump"] = 0
+		if Input.is_action_just_pressed("move_up"):
+			jump_data["jump_acceleration"] = jump_data["force"]
 	else:
-		gravity = default_gravity
-	
-
+		jump_data["last_valid_jump"] += 1
+	if Input.is_action_pressed("move_up") and jump_data["last_valid_jump"] < jump_data["jump_frames"] and jump_data["jump_acceleration"] > 0:
+		jump_data["jump_acceleration"] = jump_data["force"]
+	elif jump_data["jump_acceleration"] > 0:
+		jump_data["jump_acceleration"] -= 20
+	velocity.y -= jump_data["jump_acceleration"]
+	velocity.y += gravity
 	velocity.x += x_movement * speed
-	velocity.y += gravity 
-	velocity *= friction # reduce velocity so player stops moving eventually
-
+	velocity *= friction
 	move_and_slide()
+		
+	
+	
+	#if Input.is_action_just_pressed("move_up"):
+		#if is_on_floor():
+				## last_valid_jump keeps track of how long it's been since the player could organically jump.
+				## As long as it has been less than jump_frames, the player can continue to to gain velocity
+				## by holding jump.
+				#last_valid_jump = 0
+#
+	#var x_movement = Input.get_axis("move_left", "move_right")
+#
+	#if Input.is_action_pressed("move_up"):
+		#
+		#gravity = reduced_gravity # player is slightly less affected by gravity while holding up
+		#last_valid_jump += 1
+		#if last_valid_jump < jump_frames:
+			#velocity.y -= jump_force_per_frame
+	#else:
+		#gravity = default_gravity
+	#
+#
+	#velocity.x += x_movement * speed
+	#velocity.y += gravity 
+	#velocity *= friction # reduce velocity so player stops moving eventually
+#
+	#move_and_slide()
 
 func _integrate_forces(state: PhysicsDirectBodyState2D) -> void:
 	pass

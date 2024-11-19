@@ -1,0 +1,14 @@
+[gd_scene load_steps=5 format=3 uid="uid://b82cevsda01gn"]
+
+[ext_resource type="Shader" path="res://shaders/parallax.gdshader" id="1_gg846"]
+[ext_resource type="Script" path="res://scripts/parallax.gd" id="2_bvnpo"]
+[ext_resource type="Texture2D" uid="uid://bu8wn6hici2vm" path="res://images/background/l1.png" id="2_wfmk8"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_v76cq"]
+shader = ExtResource("1_gg846")
+shader_parameter/offset = Vector2(0, 0)
+
+[node name="Parallax" type="Sprite2D"]
+material = SubResource("ShaderMaterial_v76cq")
+texture = ExtResource("2_wfmk8")
+script = ExtResource("2_bvnpo")
