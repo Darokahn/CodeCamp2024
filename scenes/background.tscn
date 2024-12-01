@@ -1,33 +1,31 @@
-[gd_scene load_steps=4 format=3 uid="uid://bnjolnjffwe01"]
+[gd_scene load_steps=5 format=3 uid="uid://bnjolnjffwe01"]
 
 [ext_resource type="Texture2D" uid="uid://bu8wn6hici2vm" path="res://images/background/l1.png" id="1_5sjtf"]
+[ext_resource type="Script" path="res://scenes/background.gd" id="1_wrkbg"]
 [ext_resource type="Texture2D" uid="uid://3p4u5taojk2" path="res://images/background/l2.png" id="2_5y6mw"]
 [ext_resource type="Texture2D" uid="uid://b7stb757k5esd" path="res://images/background/l3.png" id="3_pjwug"]
 
-[node name="Background" type="Node2D"]
+[node name="Background" type="ParallaxBackground"]
+scroll_offset = Vector2(0, -100)
+script = ExtResource("1_wrkbg")
 
-[node name="ParallaxBackground" type="ParallaxBackground" parent="."]
+[node name="Moon" type="ParallaxLayer" parent="."]
+motion_scale = Vector2(0.05, 0.05)
 
-[node name="ParallaxLayer3" type="ParallaxLayer" parent="ParallaxBackground"]
-position = Vector2(586, 324)
-motion_scale = Vector2(0.1, 0.1)
-
-[node name="Sprite2D" type="Sprite2D" parent="ParallaxBackground/ParallaxLayer3"]
+[node name="Sprite2D" type="Sprite2D" parent="Moon"]
 scale = Vector2(2.2, 2.2)
 texture = ExtResource("3_pjwug")
 
-[node name="ParallaxLayer" type="ParallaxLayer" parent="ParallaxBackground"]
-position = Vector2(586, 324)
+[node name="Mountains" type="ParallaxLayer" parent="."]
 motion_scale = Vector2(0.1, 0.1)
 
-[node name="Sprite2D" type="Sprite2D" parent="ParallaxBackground/ParallaxLayer"]
+[node name="Sprite2D" type="Sprite2D" parent="Mountains"]
 scale = Vector2(2.2, 2.2)
 texture = ExtResource("1_5sjtf")
 
-[node name="ParallaxLayer2" type="ParallaxLayer" parent="ParallaxBackground"]
-position = Vector2(586, 324)
-motion_scale = Vector2(0.1, 0.1)
+[node name="Buildings" type="ParallaxLayer" parent="."]
+motion_scale = Vector2(0.11, 0.11)
 
-[node name="Sprite2D" type="Sprite2D" parent="ParallaxBackground/ParallaxLayer2"]
+[node name="Sprite2D" type="Sprite2D" parent="Buildings"]
 scale = Vector2(2.2, 2.2)
 texture = ExtResource("2_5y6mw")

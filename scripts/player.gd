@@ -115,7 +115,7 @@ func process_hammer():
 		for object in $hammer.get_overlapping_bodies():
 			if "enemy" in object:
 				launch_hammer(object.position)
-				object.kill()
+				Globals.kill(object)
 		hammer_data["spin_progress"] = (hammer_data["spin_progress"] + 1) % (hammer_data["total_steps"] * delay_scale)
 		var spin_progress = hammer_data["spin_progress"]
 		var int_step = spin_progress / delay_scale

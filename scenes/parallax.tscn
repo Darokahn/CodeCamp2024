@@ -1,4 +1,4 @@
-[gd_scene load_steps=5 format=3 uid="uid://b82cevsda01gn"]
+[gd_scene load_steps=5 format=3 uid="uid://kmuwon31mgbv"]
 
 [ext_resource type="Shader" path="res://shaders/parallax.gdshader" id="1_gg846"]
 [ext_resource type="Script" path="res://scripts/parallax.gd" id="2_bvnpo"]
